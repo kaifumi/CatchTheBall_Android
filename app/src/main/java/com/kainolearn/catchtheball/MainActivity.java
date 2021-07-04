@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         black = findViewById(R.id.black);
         pink = findViewById(R.id.pink);
 
+
         orange.setX(-80.0f);
         orange.setY(-80.0f);
         black.setX(-80.0f);
