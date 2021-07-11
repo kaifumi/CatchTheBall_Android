@@ -2,12 +2,16 @@ package com.kainolearn.catchtheball;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.*;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,10 +32,19 @@ public class MainActivity extends AppCompatActivity {
 
     // 位置
     private float boxY;
+    private float orangeX;
+    private float orangeY;
+    private float blackX;
+    private float blackY;
+    private float pinkX;
+    private float pinkY;
 
     // サイズ
     private int frameHeight;
     private int boxSize;
+    private int screenWidth;
+    private int screenHeight;
+
 
     // Handler & Timer
     private Handler handler = new Handler();
@@ -53,6 +66,20 @@ public class MainActivity extends AppCompatActivity {
         black = findViewById(R.id.black);
         pink = findViewById(R.id.pink);
 
+        // Screen Size
+        WindowManager wm = getWindowManager();
+//        Context context = this;
+//        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Log.d("kainotest", "wm:"+wm);
+        Log.d("kainotest", "display:"+display);
+        Log.d("kainotest", "size:"+size);
+
+        screenWidth = size.x;
+        screenHeight = size.y;
+
 
         orange.setX(-80.0f);
         orange.setY(-80.0f);
@@ -61,11 +88,37 @@ public class MainActivity extends AppCompatActivity {
         pink.setX(-80.0f);
         pink.setY(-80.0f);
 
-        boxY = 500.0f;
     }
 
 
     public void changePos() {
+
+        // Orange
+        orangeX -= 12;
+        if (orangeX < 0) {
+            orangeX = screenWidth + 20;
+            orangeY = (float)Math.floor(Math.random() * (frameHeight -orange.getHeight()));
+        }
+        orange.setX(orangeX);
+        orange.setY(orangeY);
+
+        // Black
+        blackX -= 16;
+        if (blackX < 0) {
+            blackX += screenWidth + 10;
+            blackY = (float)Math.floor(Math.random() * (frameHeight -black.getHeight()));
+        }
+        black.setX(blackX);
+        black.setY(blackY);
+
+        // Pink
+        pinkX -= 16;
+        if (pinkX < 0) {
+            pinkX += screenWidth + 5000;
+            pinkY = (float)Math.floor(Math.random() * (frameHeight -pink.getHeight()));
+        }
+        pink.setX(pinkX);
+        pink.setY(pinkY);
 
         if (action_flg) {
             // タッチしてる
@@ -90,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
 
             FrameLayout flame = findViewById(R.id.frame);
             frameHeight = flame.getHeight();
-            Log.d("kaino", "frameHeight:"+frameHeight);
+            Log.d("kkk", "frameHeight:"+frameHeight);
 
             boxY = box.getY();
             boxSize = box.getHeight();
-            Log.d("kaino", "boxY:"+boxY);
-            Log.d("kaino", "boxSize:"+boxSize);
+            Log.d("kkk", "boxY:"+boxY);
+            Log.d("kkk", "boxSize:"+boxSize);
 
             startLabel.setVisibility(View.GONE);
 
