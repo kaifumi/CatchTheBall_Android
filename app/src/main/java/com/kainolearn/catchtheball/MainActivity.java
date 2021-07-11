@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private float pinkX;
     private float pinkY;
 
+    // Score
+    private int score = 0;
+
     // サイズ
     private int frameHeight;
     private int boxSize;
@@ -88,10 +91,13 @@ public class MainActivity extends AppCompatActivity {
         pink.setX(-80.0f);
         pink.setY(-80.0f);
 
+        scoreLabel.setText("Score : 0");
     }
 
 
     public void changePos() {
+
+        hitCheck();
 
         // Orange
         orangeX -= 12;
@@ -133,6 +139,53 @@ public class MainActivity extends AppCompatActivity {
         if (boxY > frameHeight - boxSize) boxY = frameHeight - boxSize;
 
         box.setY(boxY);
+
+        scoreLabel.setText("Score : " + score);
+    }
+
+    public void hitCheck() {
+
+        // orange
+        float orangeCenterX = orangeX + orange.getWidth() / 2;
+        float orangeCenterY = orangeY + orange.getHeight() / 2;
+
+        // 0 <= orangeCenterX <= boxWidth
+        // boxY <= orangeCenterY <= boxY + boxHeight
+
+        if (0 <= orangeCenterX && orangeCenterX <= boxSize &&
+            boxY <= orangeCenterY && orangeCenterY <= boxY + boxSize) {
+
+            orangeX = -10.0f;
+            score += 10;
+        }
+
+        // pink
+        float pinkCenterX = pinkX + pink.getWidth() / 2;
+        float pinkCenterY = pinkY + pink.getHeight() / 2;
+
+        if (0 <= pinkCenterX && pinkCenterX <= boxSize &&
+                boxY <= pinkCenterY && pinkCenterY <= boxY + boxSize) {
+
+            pinkX = -10.0f;
+            score += 30;
+        }
+
+        // black
+        float blackCenterX = blackX + black.getWidth() / 2;
+        float blackCenterY = blackY + black.getHeight() / 2;
+
+        if (0 <= blackCenterX && blackCenterX <= boxSize &&
+                boxY <= blackCenterY && blackCenterY <= boxY + boxSize) {
+
+            // Game Over!
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+            }
+
+            // 結果画面へ
+        }
+
     }
 
     @Override
