@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private int screenWidth;
     private int screenHeight;
 
-
     // Handler & Timer
     private Handler handler = new Handler();
     private Timer timer = new Timer();
@@ -58,10 +57,18 @@ public class MainActivity extends AppCompatActivity {
     private boolean action_flg = false;
     private boolean start_flg = false;
 
+
+    // Sound
+    private SoundPlayer soundPlayer;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        soundPlayer = new SoundPlayer(this);
 
         scoreLabel = findViewById(R.id.scoreLabel);
         startLabel = findViewById(R.id.startLabel);
@@ -158,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
             orangeX = -10.0f;
             score += 10;
+            soundPlayer.playHitSound();
         }
 
         // pink
@@ -169,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
             pinkX = -10.0f;
             score += 30;
+            soundPlayer.playHitSound();
         }
 
         // black
@@ -178,15 +187,19 @@ public class MainActivity extends AppCompatActivity {
         if (0 <= blackCenterX && blackCenterX <= boxSize &&
                 boxY <= blackCenterY && blackCenterY <= boxY + boxSize) {
 
+            soundPlayer.playOverSound();
+
             // Game Over!
             if (timer != null) {
                 timer.cancel();
                 timer = null;
             }
-
+            Log.d("kkk", "timer:"+timer);
             // 結果画面へ
             Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
             intent.putExtra("SCORE", score);
+            Log.d("kkk", "score:"+score);
+            Log.d("kkk", "intent:"+intent);
             startActivity(intent);
         }
 

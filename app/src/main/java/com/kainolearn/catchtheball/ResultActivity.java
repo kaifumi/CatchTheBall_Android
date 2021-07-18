@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,18 +21,17 @@ public class ResultActivity extends AppCompatActivity {
 
         int score = getIntent().getIntExtra("SCORE", 0);
         scoreLabel.setText(score + "");
-
         SharedPreferences sharedPreferences = getSharedPreferences("GAME_DATA", MODE_PRIVATE);
         int highScore = sharedPreferences.getInt("HIGH_SCORE", 0);
 
-        if (score > highScore) {
+        if (score >= highScore) {
             highScoreLabel.setText("High Score : " + score);
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("HIGH_SCORE", score);
             editor.apply();
         } else {
-            highScoreLabel.setText(highScore);
+            highScoreLabel.setText("High Score : " + highScore);
         }
     }
 
